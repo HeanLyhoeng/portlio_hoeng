@@ -16,22 +16,6 @@ const youtubePath = "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12
 export const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
-
-  // Check theme
-  useEffect(() => {
-    const checkTheme = () => {
-      setIsDark(document.documentElement.classList.contains('dark'));
-    };
-    checkTheme();
-    // Watch for theme changes
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
-    return () => observer.disconnect();
-  }, []);
 
   // Handle scroll effect
   useEffect(() => {
@@ -143,17 +127,11 @@ export const Header: React.FC = () => {
   };
 
   // Apple-style glassmorphism background
-  const glassBg = isDark 
-    ? 'rgba(0, 0, 0, 0.7)' 
-    : 'rgba(255, 255, 255, 0.7)';
+  const glassBg = 'rgba(0, 0, 0, 0.7)';
   
-  const textColor = isDark 
-    ? 'rgba(255, 255, 255, 0.6)' 
-    : 'rgba(0, 0, 0, 0.6)';
+  const textColor = 'rgba(255, 255, 255, 0.6)';
   
-  const textColorHover = isDark 
-    ? 'rgba(255, 255, 255, 1)' 
-    : 'rgba(0, 0, 0, 1)';
+  const textColorHover = 'rgba(255, 255, 255, 1)';
 
   return (
     <>
@@ -223,8 +201,8 @@ export const Header: React.FC = () => {
                 }}
                 className="hidden lg:block px-4 py-1 rounded-full text-[12px] font-medium transition-all duration-300"
                 style={{
-                  background: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)',
-                  color: isDark ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)',
+                  background: 'rgba(255, 255, 255, 1)',
+                  color: 'rgba(0, 0, 0, 1)',
                   fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif',
                 }}
                 onMouseEnter={(e) => {
@@ -285,7 +263,7 @@ export const Header: React.FC = () => {
               transition={{ duration: 0.3 }}
               className="fixed inset-0 z-[999] lg:hidden"
               style={{
-                background: isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(0, 0, 0, 0.2)',
+                background: 'rgba(0, 0, 0, 0.4)',
                 backdropFilter: 'blur(10px)',
                 WebkitBackdropFilter: 'blur(10px)',
               }}
@@ -318,7 +296,7 @@ export const Header: React.FC = () => {
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.color = textColorHover;
-                      e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+                      e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = textColor;
@@ -339,7 +317,7 @@ export const Header: React.FC = () => {
                 <motion.div 
                   variants={itemVariants} 
                   className="mt-8 pt-6 border-t"
-                  style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' }}
+                  style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                 >
                   <h4 
                     className="text-xs font-medium mb-4 uppercase tracking-wider"
@@ -431,8 +409,8 @@ export const Header: React.FC = () => {
                     }}
                     className="w-full px-5 py-3 rounded-full text-sm font-medium transition-opacity duration-300"
                     style={{
-                      background: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)',
-                      color: isDark ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)',
+                      background: 'rgba(255, 255, 255, 1)',
+                      color: 'rgba(0, 0, 0, 1)',
                       fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif',
                     }}
                     onMouseEnter={(e) => {

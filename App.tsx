@@ -32,21 +32,11 @@ const App: React.FC = () => {
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [draggedSection, setDraggedSection] = useState<string | null>(null);
   
-  // Theme State
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') || 'light';
-    }
-    return 'light';
-  });
-
-  // Apply Theme Class
+  // Force dark theme
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    root.classList.add('dark');
+  }, []);
 
   // Handle hash routing and active menu tracking
   useEffect(() => {
@@ -238,18 +228,9 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen selection:bg-neon-primary selection:text-black overflow-x-hidden ${theme === 'dark' ? 'bg-dark-bg' : 'bg-white'}`}>
+    <div className="min-h-screen selection:bg-neon-primary selection:text-black overflow-x-hidden bg-dark-bg">
       <Header />
       
-      {/* Theme Toggle Button */}
-      <button
-        onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
-        className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-lg border border-slate-200 dark:border-slate-700 transition-all hover:scale-110"
-        aria-label="Toggle Theme"
-      >
-        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-      </button>
-
       {isAdminMode && (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-neon-primary text-black px-4 py-2 rounded-lg font-mono text-sm font-bold shadow-lg">
           Admin Mode: Drag sections to reorder (Ctrl+Shift+A to toggle)

@@ -1324,22 +1324,15 @@ header, .hero {
 .neon-box-glow,
 .neon-text-glow { box-shadow: none !important; text-shadow: none !important; }
 
-/* Theme variables (light / dark) */
 :root {
-  --bg: #ffffff;
-  --text: #0f172a;
-  --card: #ffffff;
-  --muted: #6b7280;
+  --bg: #000000;
+  --text: #ffffff;
+  --card: #1a1a1a;
+  --muted: #a0a0a0;
   --accent: #0ea5e9;
 }
 
-.dark {
-  --bg: #071226;
-  --text: #e6eef8;
-  --card: #0b1220;
-  --muted: #f3f4f8;
-  --accent: #60a5fa;
-}
+/* Remove the .dark class override */
 
 /* Apply theme */
 html, body {
