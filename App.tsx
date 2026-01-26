@@ -1,0 +1,276 @@
+import React, { useState, useEffect } from 'react';
+import { Header } from './components/Header';
+import { Hero } from './components/Hero';
+import { TrustBar } from './components/TrustBar';
+import { FeaturedWork } from './components/FeaturedWork';
+import { Skills } from './components/Skills';
+import { PortfolioCategories } from './components/PortfolioCategories';
+import { CallToAction } from './components/CallToAction';
+import { Footer } from './components/Footer';
+import { DesignDetail } from './components/DesignDetail';
+import { ProjectDetail } from './components/ProjectDetail';
+import { AboutUs } from './components/AboutUs';
+import { Services } from './components/Services';
+import { SoftwareSales } from './Nuel-folio ux_ui-portfolio/src/pages/SoftwareSales';
+import { Moon, Sun } from 'lucide-react';
+
+// Section component type for reordering
+type SectionComponent = {
+  id: string;
+  name: string;
+  component: React.ReactNode;
+};
+
+const App: React.FC = () => {
+  const [currentRoute, setCurrentRoute] = useState<string>('');
+  const [activeMenu, setActiveMenu] = useState<string>('home');
+  const [sectionOrder, setSectionOrder] = useState<string[]>(() => {
+    // Load from localStorage or use default
+    const saved = localStorage.getItem('sectionOrder');
+    return saved ? JSON.parse(saved) : ['portfolio', 'services', 'about', 'resources'];
+  });
+  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [draggedSection, setDraggedSection] = useState<string | null>(null);
+  
+  // Theme State
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') || 'light';
+    }
+    return 'light';
+  });
+
+  // Apply Theme Class
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  // Handle hash routing and active menu tracking
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '' || hash === '#/' || hash === '#') {
+        // Home page
+        setCurrentRoute('');
+        setActiveMenu('home');
+      } else if (hash.startsWith('#/project/')) {
+        const projectId = hash.replace('#/project/', '');
+        setCurrentRoute(`project-${projectId}`);
+        setActiveMenu('home'); // Keep home background for project details
+      } else if (hash.startsWith('#/design/')) {
+        setCurrentRoute(hash.replace('#/design/', ''));
+        setActiveMenu('home'); // Keep home background for design details
+      } else if (hash === '#/about') {
+        setCurrentRoute('about');
+        setActiveMenu('about');
+      } else if (hash === '#/services') {
+        setCurrentRoute('services');
+        setActiveMenu('services');
+      } else if (hash === '#/software-sales') {
+        setCurrentRoute('software-sales');
+        setActiveMenu('services');
+      } else if (hash === '#work') {
+        // Selected Work anchor link
+        setCurrentRoute('');
+        setActiveMenu('work');
+      } else if (hash === '#resources') {
+        // Resources anchor link
+        setCurrentRoute('');
+        setActiveMenu('resources');
+      } else {
+        // For other anchor links on home page, keep current route empty
+        if (hash.startsWith('#')) {
+          setCurrentRoute('');
+          setActiveMenu('home');
+        }
+      }
+    };
+
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Save section order to localStorage
+  useEffect(() => {
+    localStorage.setItem('sectionOrder', JSON.stringify(sectionOrder));
+  }, [sectionOrder]);
+
+  // Admin mode toggle (Ctrl+Shift+A)
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        setIsAdminMode(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
+  const handleBack = () => {
+    window.location.hash = '';
+    setCurrentRoute('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Section definitions
+  const sections: Record<string, SectionComponent> = {
+    portfolio: {
+      id: 'portfolio',
+      name: 'Portfolio',
+      component: <FeaturedWork />
+    },
+    services: {
+      id: 'services',
+      name: 'Services',
+      component: <Skills />
+    },
+    about: {
+      id: 'about',
+      name: 'About Me',
+      component: <PortfolioCategories />
+    },
+    resources: {
+      id: 'resources',
+      name: 'Resources',
+      component: <CallToAction />
+    }
+  };
+
+  const handleDragStart = (sectionId: string) => {
+    setDraggedSection(sectionId);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (targetSectionId: string) => {
+    if (!draggedSection || draggedSection === targetSectionId) return;
+
+    const newOrder = [...sectionOrder];
+    const draggedIndex = newOrder.indexOf(draggedSection);
+    const targetIndex = newOrder.indexOf(targetSectionId);
+
+    newOrder.splice(draggedIndex, 1);
+    newOrder.splice(targetIndex, 0, draggedSection);
+
+    setSectionOrder(newOrder);
+    setDraggedSection(null);
+  };
+
+  // Route handling
+  if (currentRoute === 'about') {
+    return (
+      <div className="min-h-screen bg-dark-bg text-slate-200 selection:bg-neon-primary selection:text-black overflow-x-hidden">
+        <Header />
+        <AboutUs onBack={handleBack} />
+      </div>
+    );
+  }
+
+  if (currentRoute === 'services') {
+    return (
+      <div className="min-h-screen bg-dark-bg text-slate-200 selection:bg-neon-primary selection:text-black overflow-x-hidden">
+        <Header />
+        <Services onBack={handleBack} />
+      </div>
+    );
+  }
+
+  if (currentRoute === 'software-sales') {
+    return (
+      <div className="min-h-screen bg-dark-bg text-slate-200 selection:bg-neon-primary selection:text-black overflow-x-hidden">
+        <Header />
+        <SoftwareSales onBack={handleBack} />
+      </div>
+    );
+  }
+
+  if (currentRoute.startsWith('project-') || /^\d+$/.test(currentRoute)) {
+    const projectId = currentRoute.replace('project-', '');
+    return (
+      <div className="min-h-screen bg-dark-bg text-slate-200 selection:bg-neon-primary selection:text-black overflow-x-hidden">
+        <Header />
+        <ProjectDetail projectId={projectId} onBack={handleBack} />
+        <Footer />
+      </div>
+    );
+  }
+
+  if (currentRoute && currentRoute !== 'about' && currentRoute !== 'services') {
+    return (
+      <div className="min-h-screen bg-dark-bg text-slate-200 selection:bg-neon-primary selection:text-black overflow-x-hidden">
+        <Header />
+        <DesignDetail categoryTitle={currentRoute} onBack={handleBack} />
+        <Footer />
+      </div>
+    );
+  }
+
+  // Render sections in order
+  const renderSection = (sectionId: string) => {
+    const section = sections[sectionId];
+    if (!section) return null;
+
+    const sectionElement = (
+      <div
+        key={section.id}
+        draggable={isAdminMode}
+        onDragStart={() => handleDragStart(section.id)}
+        onDragOver={handleDragOver}
+        onDrop={() => handleDrop(section.id)}
+        className={isAdminMode ? 'relative cursor-move' : ''}
+      >
+        {isAdminMode && (
+          <div className="absolute top-4 right-4 z-10 bg-neon-primary text-black px-3 py-1 rounded text-xs font-mono font-bold">
+            {section.name}
+          </div>
+        )}
+        {section.component}
+      </div>
+    );
+
+    return sectionElement;
+  };
+
+  return (
+    <div className={`min-h-screen selection:bg-neon-primary selection:text-black overflow-x-hidden ${theme === 'dark' ? 'bg-dark-bg' : 'bg-white'}`}>
+      <Header />
+      
+      {/* Theme Toggle Button */}
+      <button
+        onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
+        className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-lg border border-slate-200 dark:border-slate-700 transition-all hover:scale-110"
+        aria-label="Toggle Theme"
+      >
+        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+      </button>
+
+      {isAdminMode && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-neon-primary text-black px-4 py-2 rounded-lg font-mono text-sm font-bold shadow-lg">
+          Admin Mode: Drag sections to reorder (Ctrl+Shift+A to toggle)
+        </div>
+      )}
+      <main>
+        <div
+          draggable={isAdminMode}
+          onDragStart={() => handleDragStart('portfolio')}
+          onDragOver={handleDragOver}
+          onDrop={() => handleDrop('portfolio')}
+        >
+          <Hero activeMenu={activeMenu} />
+          <TrustBar />
+        </div>
+        
+        {sectionOrder.map(sectionId => renderSection(sectionId))}
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default App;
