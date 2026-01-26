@@ -32,9 +32,9 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
   // Team Members Data - Edit names, roles, and image paths here
   const teamMembers = [
-    { name: "Hean Lyhoeng", role: "Graphic & Video , Digital Marking , Web Designer", image: '/img/Team/Hoeng.jpg'},
-    { name: "Seam Oudom", role: "Creative Director Graphic Designer , Flim/MotionVideo Editor.", image: '/img/Team/Oudom.jpg' },
-    { name: "Moun Taipon", role: "BackEnd Developer", image: '/img/Team/Taipon.jpg' },
+    { name: "Hean Lyhoeng", role: "Graphic & Video , Digital Marking , Web Designer", image: '/img/team/hoeng.jpg'},
+    { name: "Seam Oudom", role: "Creative Director Graphic Designer , Flim/MotionVideo Editor.", image: '/img/team/oudom.jpg' },
+    { name: "Moun Taipon", role: "BackEnd Developer", image: '/img/team/taipon.jpg' },
   ];
 
   // Outcomes and Results Data - Edit project names, metrics, logos, and descriptions here
