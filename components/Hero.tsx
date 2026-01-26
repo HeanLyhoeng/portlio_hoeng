@@ -17,7 +17,7 @@ export const Hero: React.FC<HeroProps> = ({ activeMenu = 'home' }) => {
   // Fallback content if Supabase is not configured or fails
   const fallbackContent: HeroContent = {
     id: 'fallback',
-    hero_title: 'Designing Intuitive Digital Experiences',
+    hero_title: 'Product Designer focused on Simplicity & Functionality',
     hero_description: 'I craft user-centered digital products that blend aesthetics with functionality. Specializing in SaaS interfaces, mobile apps, and design systems.',
     hero_button_text: 'View My Portfolio',
     created_at: new Date().toISOString(),
