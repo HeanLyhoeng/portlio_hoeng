@@ -87,7 +87,7 @@ export const CallToAction: React.FC = () => {
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-xs sm:text-sm text-slate-400 mb-1">Website</p>
-                                    <p className="text-base sm:text-lg text-white font-mono break-all">www.lyhoeng.design</p>
+                                    <p className="text-base sm:text-lg text-white font-mono break-all">www.lyhoeng.online/p</p>
                                 </div>
                             </div>
 
